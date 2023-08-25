@@ -145,6 +145,7 @@ class CloudSaves {
     [void] RemoveBackups () {
         if (-not $this.WarningsOccured -and $this.SuccessCount -ne 0) {
             Write-Host "Removing backups folder..."
+            Write-Host ""
             $errorOutput = ""
             Remove-Item -Path $this.BackupDir -Recurse -Force -ErrorAction SilentlyContinue -ErrorVariable errorOutput
             if ($errorOutput -ne "") {
