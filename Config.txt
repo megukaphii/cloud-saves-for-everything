@@ -1,0 +1,3 @@
+cloudSavesDir=%USERPROFILE%\OneDrive\Games\CloudSaves
+backupDir=%USERPROFILE%\CloudSaveBackups
+tempDir=\TEMP
