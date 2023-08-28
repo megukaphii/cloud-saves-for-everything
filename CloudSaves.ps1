@@ -175,7 +175,7 @@ class CloudSaves {
     }
 
     [void] SkipExistingGame ([string]$GameName) {
-        Write-Host "$GameName appears to already be syncing." -ForegroundColor Yellow
+        Write-Host "$GameName appears to already be syncing." -ForegroundColor Blue
         Write-Host ""
         $GameName >> SkippedGames.log
     }
@@ -202,6 +202,12 @@ class CloudSaves {
         New-Item -Path $LocalDir -ItemType Directory
         Write-Host "Save folder for $GameName created." -ForegroundColor Blue
         $this.InvokeGame($GameName, $LocalDir, $CloudGameDir)
+    }
+
+    [void] SkipMissingGame ([string]$GameName) {
+        Write-Host "$GameName does not appear to be installed." -ForegroundColor Blue
+        Write-Host ""
+        $GameName >> SkippedGames.log
     }
 
     [void] CompleteProcess () {
@@ -235,7 +241,12 @@ class CloudSaves {
                     $this.InvokeGame($gameName, $localDir, $cloudGameDir)
                 }
             } else {
-                $this.AddAndInvokeGame($gameName, $localDir, $cloudGameDir)
+                $parentDir = Split-Path -Path $localDir
+                if (Test-Path $parentDir) {
+                    $this.AddAndInvokeGame($gameName, $localDir, $cloudGameDir)
+                } else {
+                    $this.SkipMissingGame($gameName);
+                }
             }
         }
         $this.CompleteProcess()
